@@ -1,0 +1,45 @@
+{
+    "name": "ztncui",
+    "id": "ztncui",
+    "packaging_format": 1,
+    "description": {
+        "en": "ZeroTier network controller user interface",
+        "fr": "Interface utilisateur pour le contrôler de réseau ZeroTier"
+    },
+    "version": "0.5.8~ynh1",
+    "url": "https://key-networks.com/ztncui",
+    "license": "gpl",
+    "maintainer": {
+        "name": "tituspijean",
+        "email": "tituspijean@outlook.com"
+    },
+    "requirements": {
+        "yunohost": ">= 3.5"
+    },
+    "multi_instance": false,
+    "services": [
+        "zerotier-one"
+    ],
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "type": "domain",
+                "ask": {
+                    "en": "Choose a domain name for ztncui",
+                    "fr": "Choisissez un nom de domaine pour ztncui"
+                },
+                "example": "example.com"
+            },
+            {
+                "name": "is_public",
+                "type": "boolean",
+                "ask": {
+                    "en": "Is it a public application?",
+                    "fr": "Est-ce une application publique ?"
+                },
+                "default": false
+            }
+        ]
+    }
+}

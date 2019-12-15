@@ -1,0 +1,14 @@
+[Unit]
+Description=ZeroTier network controller user interface
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+Environment="PATH=__ENV_PATH__"
+WorkingDirectory=__FINALPATH__/src/
+ExecStart=/bin/bash __FINALPATH__/src/start.sh >> /var/log/__APP__/__APP__.log 2>&1
+
+[Install]
+WantedBy=multi-user.target
