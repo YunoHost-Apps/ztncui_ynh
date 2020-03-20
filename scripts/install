@@ -161,13 +161,10 @@ popd
 mkdir -p $final_path
 env_file=$final_path/src/.env
 touch $env_file
+chmod 600 $env_file
 
 echo "ZT_TOKEN=$(</var/lib/zerotier-one/authtoken.secret)" >> $env_file
 echo "HTTP_PORT=$port" >> $env_file
-
-cp ../conf/start.sh $final_path/src/
-ynh_replace_string "__APP__" "$app" "$final_path/src/start.sh"
-ynh_replace_string "__FINALPATH__" "$final_path" "$final_path/src/start.sh"
 
 cp $final_path/src/etc/default.passwd $final_path/src/etc/passwd
 
@@ -178,8 +175,8 @@ cp $final_path/src/etc/default.passwd $final_path/src/etc/passwd
 # Even though one can stay in HTTP mode, the ztncui requires SSL certificates
 # let's use the ones of the domain
 pushd $final_path/src/etc/tls
-	ln -s /etc/yunohost/certs/$domain/key.pem privkey.pem
-	ln -s /etc/yunohost/certs/$domain/crt.pem fullchain.pem
+	cp /etc/yunohost/certs/$domain/key.pem privkey.pem
+	cp /etc/yunohost/certs/$domain/crt.pem fullchain.pem
 popd
 
 #=================================================
@@ -201,6 +198,9 @@ ynh_script_progression --message="Configuring a systemd service..." --time --wei
 # Create a dedicated systemd config
 ynh_add_systemd_config
 ynh_replace_string "__ENV_PATH__" "$PATH" "/etc/systemd/system/$app.service"
+ynh_replace_string "__NODEJS_PATH__" "/opt/node_n/n/versions/node/$nodejs_version/bin/" "/etc/systemd/system/$app.service"
+ynh_replace_string "__FINALPATH__" "$final_path" "/etc/systemd/system/$app.service"
+
 systemctl daemon-reload
 
 #=================================================
@@ -294,3 +294,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 
 ynh_script_progression --message="Installation of $app completed" --time --last
+ynh_print_warn --message="Installation of $app completed. Default credentials: admin/password"

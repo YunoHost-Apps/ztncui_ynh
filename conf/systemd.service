@@ -4,11 +4,11 @@ After=network.target
 
 [Service]
 Type=simple
-User=root
-Group=root
+User=ztncui
+Group=ztncui
 Environment="PATH=__ENV_PATH__"
 WorkingDirectory=__FINALPATH__/src/
-ExecStart=/bin/bash __FINALPATH__/src/start.sh >> /var/log/__APP__/__APP__.log 2>&1
+ExecStart=__NODEJS_PATH__/npm start
 
 [Install]
 WantedBy=multi-user.target
