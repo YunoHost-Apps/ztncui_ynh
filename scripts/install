@@ -53,6 +53,9 @@ app=$YNH_APP_INSTANCE_NAME
 ### The execution time is given for the duration since the previous call. So the weight should be applied to this previous call.
 ynh_script_progression --message="Validating installation parameters..." --time --weight=1
 
+# Testing if ZeroTier is installed
+type zerotier > /dev/null || echo "ZeroTier is needed, but it is not installed. There is a package for that!"
+
 ### If the app uses nginx as web server (written in HTML/PHP in most cases), the final path should be "/var/www/$app".
 ### If the app provides an internal web server (or uses another application server such as uwsgi), the final path should be "/opt/yunohost/$app"
 final_path=/opt/key-networks/ztncui
