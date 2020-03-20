@@ -4,7 +4,7 @@
 # COMMON VARIABLES
 #=================================================
 
-nodejs_version=10
+nodejs_version=12
 
 #=================================================
 # PERSONAL HELPERS
