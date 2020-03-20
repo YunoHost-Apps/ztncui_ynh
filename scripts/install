@@ -164,6 +164,7 @@ touch $env_file
 chmod 600 $env_file
 
 echo "ZT_TOKEN=$(</var/lib/zerotier-one/authtoken.secret)" >> $env_file
+echo "ZT_ADDR=localhost:$(</var/lib/zerotier-one/zerotier-one.port)" >> $env_file
 echo "HTTP_PORT=$port" >> $env_file
 
 cp $final_path/src/etc/default.passwd $final_path/src/etc/passwd
