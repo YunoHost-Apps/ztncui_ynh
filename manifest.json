@@ -1,10 +1,10 @@
 {
-    "name": "ztncui",
+    "name": "Zerotier UI",
     "id": "ztncui",
     "packaging_format": 1,
     "description": {
-        "en": "ZeroTier network controller user interface",
-        "fr": "Interface utilisateur pour le contrôler de réseau ZeroTier"
+        "en": "A user interface for the ZeroTier network controller",
+        "fr": "Une interface utilisateur pour le contrôleur réseau ZeroTier"
     },
     "version": "0.5.8~ynh1",
     "url": "https://key-networks.com/ztncui",
