@@ -6,6 +6,9 @@
 
 nodejs_version=12
 
+# dependencies used by the app
+pkg_dependencies="g++"
+
 #=================================================
 # PERSONAL HELPERS
 #=================================================
