@@ -8,7 +8,7 @@
     },
     "version": "0.5.8~ynh1",
     "url": "https://key-networks.com/ztncui",
-    "license": "gpl",
+    "license": "GPL-3.0-only",
     "maintainer": {
         "name": "tituspijean",
         "email": "tituspijean@outlook.com"
@@ -16,6 +16,7 @@
     "requirements": {
         "yunohost": ">= 3.5"
     },
+    "services": [],
     "multi_instance": false,
     "arguments": {
         "install" : [
