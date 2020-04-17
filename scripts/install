@@ -152,9 +152,9 @@ ynh_system_user_create --username=$app
 ynh_script_progression --message="Performing Node app installation..." --time --weight=1
 
 pushd $final_path/src
-	npm install -g node-gyp
-	npm install
-	npm audit fix
+	ynh_debug_exec npm install node-gyp
+	ynh_debug_exec npm install
+	ynh_debug_exec npm audit fix
 popd
 
 #=================================================
