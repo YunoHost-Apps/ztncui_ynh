@@ -142,7 +142,7 @@ ynh_add_nginx_config
 ynh_script_progression --message="Configuring system user..." --time --weight=1
 
 # Create a system user
-ynh_system_user_create --username=$app
+ynh_system_user_create $app $final_path
 
 #=================================================
 # SPECIFIC SETUP
@@ -151,10 +151,12 @@ ynh_system_user_create --username=$app
 #=================================================
 ynh_script_progression --message="Performing Node app installation..." --time --weight=1
 
+chown -R $app: $final_path
+
 pushd $final_path/src
-	ynh_debug_exec $nodejs_path/npm install node-gyp
-	ynh_debug_exec $nodejs_path/npm install
-	ynh_debug_exec $nodejs_path/npm audit fix
+	exec_as $app $nodejs_path/npm install node-gyp
+	exec_as $app $nodejs_path/npm install
+	exec_as $app $nodejs_path/npm audit fix
 popd
 
 #=================================================
@@ -202,9 +204,9 @@ ynh_script_progression --message="Configuring a systemd service..." --time --wei
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
-ynh_replace_string "__ENV_PATH__" "$PATH" "/etc/systemd/system/$app.service"
-ynh_replace_string "__NODEJS_PATH__" "/opt/node_n/n/versions/node/$nodejs_version/bin/" "/etc/systemd/system/$app.service"
-ynh_replace_string "__FINALPATH__" "$final_path" "/etc/systemd/system/$app.service"
+ynh_replace_string "__ENV_PATH__" "$PATH" "$finalsystemdconf"
+ynh_replace_string "__NODEJS_PATH__" "$nodejs_path" "$finalsystemdconf"
+ynh_replace_string "__FINALPATH__" "$final_path" "$finalsystemdconf"
 
 systemctl daemon-reload
 
