@@ -183,8 +183,10 @@ ynh_use_logrotate --non-append
 #=================================================
 ynh_script_progression --message="Upgrading systemd configuration..." --time --weight=1
 
+# Store current PATH
+env_path=$PATH
 # Create a dedicated systemd config
-ynh_add_systemd_config_vars --others_var="path nodejs_path"
+ynh_add_systemd_config_vars --others_var="env_path nodejs_path"
 
 #=================================================
 # GENERIC FINALIZATION

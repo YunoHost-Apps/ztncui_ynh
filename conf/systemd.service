@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=ztncui
 Group=ztncui
-Environment="PATH=__PATH__"
+Environment="PATH=__ENV_PATH__"
 WorkingDirectory=__FINALPATH__/src/
 ExecStart=__NODEJS_PATH__/npm start
 
