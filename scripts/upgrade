@@ -157,7 +157,6 @@ echo "ZT_ADDR=localhost:$(</var/lib/zerotier-one/zerotier-one.port)" >> $env_fil
 echo "HTTP_PORT=$port" >> $env_file
 
 # Setup user credentials file
-hashedpassword=$(echo -n "$password" | $final_path/src/node_modules/argon2-cli -e)
 echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":true,\"hash\":\"$hashedpassword\"}}" >> "$final_path/src/etc/passwd"
 
 #=================================================
