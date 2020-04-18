@@ -27,6 +27,8 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url="/" #$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
+admin=$YNH_APP_ARG_ADMIN
+password=$YNH_APP_ARG_PASSWORD
 
 ### If it's a multi-instance app, meaning it can be installed several times independently
 ### The id of the app as stated in the manifest is available as $YNH_APP_ID
@@ -53,9 +55,12 @@ app=$YNH_APP_INSTANCE_NAME
 ### The execution time is given for the duration since the previous call. So the weight should be applied to this previous call.
 ynh_script_progression --message="Validating installation parameters..." --time --weight=1
 
+# Testing if ZeroTier is installed
+yunohost app list | grep -q "id: zerotier" || ynh_die "ZeroTier is needed, but it is not installed. There is a package for that!"
+
 ### If the app uses nginx as web server (written in HTML/PHP in most cases), the final path should be "/var/www/$app".
 ### If the app provides an internal web server (or uses another application server such as uwsgi), the final path should be "/opt/yunohost/$app"
-final_path=/opt/key-networks/ztncui
+final_path=/opt/yunohost/$app
 test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
 
 # Register (book) web path
@@ -105,6 +110,8 @@ ynh_script_progression --message="Installing dependencies..." --time --weight=1
 ###		- As well as the section "REINSTALL DEPENDENCIES" in the restore script
 ###		- And the section "UPGRADE DEPENDENCIES" in the upgrade script
 
+ynh_install_app_dependencies $pkg_dependencies
+
 ynh_install_nodejs --nodejs_version=$nodejs_version
 ynh_use_nodejs
 
@@ -137,7 +144,7 @@ ynh_add_nginx_config
 ynh_script_progression --message="Configuring system user..." --time --weight=1
 
 # Create a system user
-ynh_system_user_create --username=$app
+ynh_system_user_create $app $final_path
 
 #=================================================
 # SPECIFIC SETUP
@@ -146,8 +153,13 @@ ynh_system_user_create --username=$app
 #=================================================
 ynh_script_progression --message="Performing Node app installation..." --time --weight=1
 
+chown -R $app: $final_path
+
 pushd $final_path/src
-	npm install
+	exec_as $app $nodejs_path/npm --loglevel=error install node-gyp
+	exec_as $app $nodejs_path/npm --loglevel=error install
+	exec_as $app $nodejs_path/npm --loglevel=error install argon2-cli
+	exec_as $app $nodejs_path/npm --loglevel=error audit fix
 popd
 
 #=================================================
@@ -158,15 +170,19 @@ popd
 mkdir -p $final_path
 env_file=$final_path/src/.env
 touch $env_file
+chmod 600 $env_file
 
 echo "ZT_TOKEN=$(</var/lib/zerotier-one/authtoken.secret)" >> $env_file
+echo "ZT_ADDR=localhost:$(</var/lib/zerotier-one/zerotier-one.port)" >> $env_file
 echo "HTTP_PORT=$port" >> $env_file
 
-cp ../conf/start.sh $final_path/src/
-ynh_replace_string "__APP__" "$app" "$final_path/src/start.sh"
-ynh_replace_string "__FINALPATH__" "$final_path" "$final_path/src/start.sh"
+# Setup user credentials file
+hashedpassword=$(echo -n "$password" | $final_path/src/node_modules/.bin/argon2-cli -e)
+echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":true,\"hash\":\"$hashedpassword\"}}" >> "$final_path/src/etc/passwd"
 
-cp $final_path/src/etc/default.passwd $final_path/src/etc/passwd
+# Store user settings
+ynh_app_setting_set --app=$app --key=admin --value=$admin
+ynh_app_setting_set --app=$app --key=hashedpassword --value=$hashedpassword
 
 #=================================================
 # LINK CERTIFICATES
@@ -175,8 +191,8 @@ cp $final_path/src/etc/default.passwd $final_path/src/etc/passwd
 # Even though one can stay in HTTP mode, the ztncui requires SSL certificates
 # let's use the ones of the domain
 pushd $final_path/src/etc/tls
-	ln -s /etc/yunohost/certs/$domain/key.pem privkey.pem
-	ln -s /etc/yunohost/certs/$domain/crt.pem fullchain.pem
+	cp /etc/yunohost/certs/$domain/key.pem privkey.pem
+	cp /etc/yunohost/certs/$domain/crt.pem fullchain.pem
 popd
 
 #=================================================
@@ -195,10 +211,13 @@ ynh_script_progression --message="Configuring a systemd service..." --time --wei
 ###		- As well as the section "RESTORE SYSTEMD" in the restore script
 ###		- And the section "SETUP SYSTEMD" in the upgrade script
 
+# Set the systemd service settings
+ynh_replace_string "__PATH__" "$PATH" "../conf/systemd.service"
+ynh_replace_string "__NODEJS_PATH__" "$nodejs_path" "../conf/systemd.service"
+ynh_replace_string "__FINAL_PATH__" "$final_path" "../conf/systemd.service"
+
 # Create a dedicated systemd config
 ynh_add_systemd_config
-ynh_replace_string "__ENV_PATH__" "$PATH" "/etc/systemd/system/$app.service"
-systemctl daemon-reload
 
 #=================================================
 # GENERIC FINALIZATION
@@ -270,13 +289,12 @@ ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$ap
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_script_progression --message="Configuring SSOwat..." --time --weight=1
+ynh_script_progression --message="Configuring SSOwat..."
 
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
+	ynh_permission_update --permission "main" --add visitors
 fi
 
 #=================================================

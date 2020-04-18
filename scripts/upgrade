@@ -20,6 +20,9 @@ domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+port=$(ynh_app_setting_get --app=$app --key=port)
+admin=$(ynh_app_setting_get --app=$app --key=admin)
+hashedpassword=$(ynh_app_setting_get --app=$app --key=hashedpassword)
 
 #=================================================
 # CHECK VERSION
@@ -37,15 +40,6 @@ upgrade_type=$(ynh_check_app_version_changed)
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --time --weight=1
-
-# Fix is_public as a boolean value
-if [ "$is_public" = "Yes" ]; then
-	ynh_app_setting_set --app=$app --key=is_public --value=1
-	is_public=1
-elif [ "$is_public" = "No" ]; then
-	ynh_app_setting_set --app=$app --key=is_public --value=0
-	is_public=0
-fi
 
 # If db_name doesn't exist, create it
 if [ -z "$db_name" ]; then
@@ -119,7 +113,10 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Upgrading dependencies..." --time --weight=1
 
-#ynh_install_app_dependencies $pkg_dependencies
+ynh_install_app_dependencies $pkg_dependencies
+
+ynh_install_nodejs --nodejs_version=$nodejs_version
+ynh_use_nodejs
 
 #=================================================
 # CREATE DEDICATED USER
@@ -127,7 +124,7 @@ ynh_script_progression --message="Upgrading dependencies..." --time --weight=1
 ynh_script_progression --message="Making sure dedicated system user exists..." --time --weight=1
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
+ynh_system_user_create $app $final_path
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -136,8 +133,41 @@ ynh_system_user_create --username=$app
 #=================================================
 ynh_script_progression --message="Performing Node app installation..." --time --weight=1
 
+chown -R $app: $final_path
+
 pushd $final_path/src
-	npm install
+	exec_as $app $nodejs_path/npm --loglevel=error install node-gyp
+	exec_as $app $nodejs_path/npm --loglevel=error install
+	exec_as $app $nodejs_path/npm --loglevel=error install argon2-cli
+	exec_as $app $nodejs_path/npm --loglevel=error audit fix
+popd
+
+#=================================================
+# MODIFY A CONFIG FILE
+#=================================================
+
+# Setup env file
+mkdir -p $final_path
+env_file=$final_path/src/.env
+touch $env_file
+chmod 600 $env_file
+
+echo "ZT_TOKEN=$(</var/lib/zerotier-one/authtoken.secret)" >> $env_file
+echo "ZT_ADDR=localhost:$(</var/lib/zerotier-one/zerotier-one.port)" >> $env_file
+echo "HTTP_PORT=$port" >> $env_file
+
+# Setup user credentials file
+echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":true,\"hash\":\"$hashedpassword\"}}" >> "$final_path/src/etc/passwd"
+
+#=================================================
+# LINK CERTIFICATES
+#=================================================
+
+# Even though one can stay in HTTP mode, the ztncui requires SSL certificates
+# let's use the ones of the domain
+pushd $final_path/src/etc/tls
+	cp /etc/yunohost/certs/$domain/key.pem privkey.pem
+	cp /etc/yunohost/certs/$domain/crt.pem fullchain.pem
 popd
 
 #=================================================
@@ -153,6 +183,11 @@ ynh_use_logrotate --non-append
 #=================================================
 ynh_script_progression --message="Upgrading systemd configuration..." --time --weight=1
 
+# Set the systemd service settings
+ynh_replace_string "__PATH__" "$PATH" "../conf/systemd.service"
+ynh_replace_string "__NODEJS_PATH__" "$nodejs_path" "../conf/systemd.service"
+ynh_replace_string "__FINAL_PATH__" "$final_path" "../conf/systemd.service"
+
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
@@ -163,7 +198,7 @@ ynh_add_systemd_config
 #=================================================
 
 # Set permissions on app files
-chown -R root: $final_path
+chown -R $app: $final_path
 
 #=================================================
 # SETUP SSOWAT
