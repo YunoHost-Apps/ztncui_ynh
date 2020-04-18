@@ -54,7 +54,7 @@ app=$YNH_APP_INSTANCE_NAME
 ynh_script_progression --message="Validating installation parameters..." --time --weight=1
 
 # Testing if ZeroTier is installed
-type zerotier > /dev/null || echo "ZeroTier is needed, but it is not installed. There is a package for that!"
+yunohost app list | grep "id: zerotier" || ynh_die "ZeroTier is needed, but it is not installed. There is a package for that!"
 
 ### If the app uses nginx as web server (written in HTML/PHP in most cases), the final path should be "/var/www/$app".
 ### If the app provides an internal web server (or uses another application server such as uwsgi), the final path should be "/opt/yunohost/$app"
@@ -202,14 +202,13 @@ ynh_script_progression --message="Configuring a systemd service..." --time --wei
 ###		- As well as the section "RESTORE SYSTEMD" in the restore script
 ###		- And the section "SETUP SYSTEMD" in the upgrade script
 
+# Set the systemd service settings
+ynh_replace_string "__PATH__" "$PATH" "../conf/systemd.service"
+ynh_replace_string "__NODEJS_PATH__" "$nodejs_path" "../conf/systemd.service"
+ynh_replace_string "__FINAL_PATH__" "$final_path" "../conf/systemd.service"
+
 # Create a dedicated systemd config
 ynh_add_systemd_config
-ynh_replace_string "__ENV_PATH__" "$PATH" "$finalsystemdconf"
-ynh_replace_string "__NODEJS_PATH__" "$nodejs_path" "$finalsystemdconf"
-ynh_replace_string "__FINALPATH__" "$final_path" "$finalsystemdconf"
-ynh_store_file_checksum --file="$finalsystemdconf"
-
-systemctl daemon-reload
 
 #=================================================
 # GENERIC FINALIZATION
