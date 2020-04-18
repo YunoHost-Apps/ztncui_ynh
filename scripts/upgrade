@@ -143,9 +143,9 @@ ynh_script_progression --message="Performing Node app installation..." --time --
 chown -R $app: $final_path
 
 pushd $final_path/src
-	exec_as $app $nodejs_path/npm install node-gyp
-	exec_as $app $nodejs_path/npm install
-	exec_as $app $nodejs_path/npm audit fix
+	exec_as $app $nodejs_path/npm --loglevel=error install node-gyp
+	exec_as $app $nodejs_path/npm --loglevel=error install
+	exec_as $app $nodejs_path/npm --loglevel=error audit fix
 popd
 
 #=================================================
