@@ -56,7 +56,7 @@ app=$YNH_APP_INSTANCE_NAME
 ynh_script_progression --message="Validating installation parameters..." --time --weight=1
 
 # Testing if ZeroTier is installed
-yunohost app list | grep "id: zerotier" || ynh_die "ZeroTier is needed, but it is not installed. There is a package for that!"
+yunohost app list | grep -q "id: zerotier" || ynh_die "ZeroTier is needed, but it is not installed. There is a package for that!"
 
 ### If the app uses nginx as web server (written in HTML/PHP in most cases), the final path should be "/var/www/$app".
 ### If the app provides an internal web server (or uses another application server such as uwsgi), the final path should be "/opt/yunohost/$app"
