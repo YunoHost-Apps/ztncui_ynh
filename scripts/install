@@ -158,7 +158,7 @@ chown -R $app: $final_path
 pushd $final_path/src
 	exec_as $app $nodejs_path/npm --loglevel=error install node-gyp
 	exec_as $app $nodejs_path/npm --loglevel=error install
-	exec_as $app $nodejs_path/npm --loglevel=error install argon-cli
+	exec_as $app $nodejs_path/npm --loglevel=error install argon2-cli
 	exec_as $app $nodejs_path/npm --loglevel=error audit fix
 popd
 
@@ -177,7 +177,7 @@ echo "ZT_ADDR=localhost:$(</var/lib/zerotier-one/zerotier-one.port)" >> $env_fil
 echo "HTTP_PORT=$port" >> $env_file
 
 # Setup user credentials file
-hashedpassword=$(echo -n "$password" | argon2-cli -e)
+hashedpassword=$(echo -n "$password" | $final_path/src/node_modules/.bin/argon2-cli -e)
 echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":true,\"hash\":\"$hashedpassword\"}}" >> "$final_path/src/etc/passwd"
 
 # Store user settings
