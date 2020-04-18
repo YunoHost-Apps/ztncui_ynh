@@ -21,6 +21,8 @@ path_url=$(ynh_app_setting_get --app=$app --key=path)
 is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 port=$(ynh_app_setting_get --app=$app --key=port)
+admin=$(ynh_app_setting_get --app=$app --key=admin)
+hashedpassword=$(ynh_app_setting_get --app=$app --key=hashedpassword)
 
 #=================================================
 # CHECK VERSION
@@ -136,6 +138,7 @@ chown -R $app: $final_path
 pushd $final_path/src
 	exec_as $app $nodejs_path/npm --loglevel=error install node-gyp
 	exec_as $app $nodejs_path/npm --loglevel=error install
+	exec_as $app $nodejs_path/npm --loglevel=error install argon-cli
 	exec_as $app $nodejs_path/npm --loglevel=error audit fix
 popd
 
@@ -153,7 +156,9 @@ echo "ZT_TOKEN=$(</var/lib/zerotier-one/authtoken.secret)" >> $env_file
 echo "ZT_ADDR=localhost:$(</var/lib/zerotier-one/zerotier-one.port)" >> $env_file
 echo "HTTP_PORT=$port" >> $env_file
 
-cp $final_path/src/etc/default.passwd $final_path/src/etc/passwd
+# Setup user credentials file
+hashedpassword=$(echo -n "$password" | argon2-cli -e)
+echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":true,\"hash\":\"$hashedpassword\"}}" >> "$final_path/src/etc/passwd"
 
 #=================================================
 # LINK CERTIFICATES

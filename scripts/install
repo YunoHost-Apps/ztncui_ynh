@@ -27,6 +27,8 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url="/" #$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
+admin=$YNH_APP_ARG_ADMIN
+password=$YNH_APP_ARG_PASSWORD
 
 ### If it's a multi-instance app, meaning it can be installed several times independently
 ### The id of the app as stated in the manifest is available as $YNH_APP_ID
@@ -156,6 +158,7 @@ chown -R $app: $final_path
 pushd $final_path/src
 	exec_as $app $nodejs_path/npm --loglevel=error install node-gyp
 	exec_as $app $nodejs_path/npm --loglevel=error install
+	exec_as $app $nodejs_path/npm --loglevel=error install argon-cli
 	exec_as $app $nodejs_path/npm --loglevel=error audit fix
 popd
 
@@ -173,7 +176,13 @@ echo "ZT_TOKEN=$(</var/lib/zerotier-one/authtoken.secret)" >> $env_file
 echo "ZT_ADDR=localhost:$(</var/lib/zerotier-one/zerotier-one.port)" >> $env_file
 echo "HTTP_PORT=$port" >> $env_file
 
-cp $final_path/src/etc/default.passwd $final_path/src/etc/passwd
+# Setup user credentials file
+hashedpassword=$(echo -n "$password" | argon2-cli -e)
+echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":true,\"hash\":\"$hashedpassword\"}}" >> "$final_path/src/etc/passwd"
+
+# Store user settings
+ynh_app_setting_set --app=$app --key=admin --value=$admin
+ynh_app_setting_set --app=$app --key=hashedpassword --value=$hashedpassword
 
 #=================================================
 # LINK CERTIFICATES
