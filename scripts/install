@@ -309,4 +309,3 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 
 ynh_script_progression --message="Installation of $app completed" --time --last
-ynh_print_warn --message="Installation of $app completed. Default credentials: admin/password"
