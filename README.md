@@ -19,19 +19,19 @@ ztncui is a web user interface for a standalone ZeroTier network controller. It 
 
 ## Configuration
 
-How to configure this app: by an admin panel, a plain file with SSH, or any other way.
+No particular configuration is needed after initial installation.
 
 ## Documentation
 
- * Official documentation: Link to the official documentation of this app
+ * [Official documentation](https://key-networks.com/ztncui/)
  * YunoHost documentation: If specific documentation is needed, feel free to contribute.
 
 ## YunoHost specific features
 
 #### Multi-users support
 
- * No LDAP and HTTP auth supported. ztncui implements its own `passwd` file.
- * Can the app be used by multiple users? Yes. See `/opt/key-networks/ztncui/src/etc/passwd`
+ * No LDAP and HTTP auth supported.
+ * Can the app be used by multiple users? Yes, you have to add them manually in `/opt/key-networks/ztncui/src/etc/passwd`, see ztncui documentation.
 
 #### Supported architectures
 
@@ -40,7 +40,7 @@ How to configure this app: by an admin panel, a plain file with SSH, or any othe
 
 ## Limitations
 
-* [ZeroTier for YunoHost](https://github.com/tituspijean/zerotier_ynh) has to be installed beforehand.
+* [ZeroTier for YunoHost](https://github.com/YunoHost-Apps/zerotier_ynh) has to be installed beforehand.
 
 ## Additional information
 
