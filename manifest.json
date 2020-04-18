@@ -14,7 +14,7 @@
         "email": "tituspijean@outlook.com"
     },
     "requirements": {
-        "yunohost": ">= 3.5"
+        "yunohost": ">= 3.7"
     },
     "services": [],
     "multi_instance": false,
@@ -31,7 +31,7 @@
                     "en": "REMINDER: ztncui needs the ZeroTier app to be already installed.",
                     "fr": "RAPPEL: ztncui nécessite que l'app ZeroTier soit déjà installée."
                 },
-                "example": "example.com"
+                "example": "zt.example.com"
             },
             {
                 "name": "is_public",
