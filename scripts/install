@@ -211,13 +211,8 @@ ynh_script_progression --message="Configuring a systemd service..." --time --wei
 ###		- As well as the section "RESTORE SYSTEMD" in the restore script
 ###		- And the section "SETUP SYSTEMD" in the upgrade script
 
-# Set the systemd service settings
-ynh_replace_string "__PATH__" "$PATH" "../conf/systemd.service"
-ynh_replace_string "__NODEJS_PATH__" "$nodejs_path" "../conf/systemd.service"
-ynh_replace_string "__FINAL_PATH__" "$final_path" "../conf/systemd.service"
-
 # Create a dedicated systemd config
-ynh_add_systemd_config
+ynh_add_systemd_config_vars --others_var="path nodejs_path"
 
 #=================================================
 # GENERIC FINALIZATION

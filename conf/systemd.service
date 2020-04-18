@@ -7,7 +7,7 @@ Type=simple
 User=ztncui
 Group=ztncui
 Environment="PATH=__PATH__"
-WorkingDirectory=__FINAL_PATH__/src/
+WorkingDirectory=__FINALPATH__/src/
 ExecStart=__NODEJS_PATH__/npm start
 
 [Install]
