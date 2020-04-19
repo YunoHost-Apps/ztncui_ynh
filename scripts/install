@@ -6,8 +6,8 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-source _common.sh
 source /usr/share/yunohost/helpers
+source _common.sh
 
 #=================================================
 # MANAGE SCRIPT FAILURE
@@ -156,10 +156,10 @@ ynh_script_progression --message="Performing Node app installation..." --time --
 chown -R $app: $final_path
 
 pushd $final_path/src
-	exec_as $app $nodejs_path/npm --loglevel=error install node-gyp
-	exec_as $app $nodejs_path/npm --loglevel=error install
-	exec_as $app $nodejs_path/npm --loglevel=error install argon2-cli
-	exec_as $app $nodejs_path/npm --loglevel=error audit fix
+	ynh_exec_as $app $ynh_npm --loglevel=error install node-gyp
+	ynh_exec_as $app $ynh_npm --loglevel=error install
+	ynh_exec_as $app $ynh_npm --loglevel=error install argon2-cli
+	ynh_exec_as $app $ynh_npm --loglevel=error audit fix
 popd
 
 #=================================================
@@ -211,10 +211,8 @@ ynh_script_progression --message="Configuring a systemd service..." --time --wei
 ###		- As well as the section "RESTORE SYSTEMD" in the restore script
 ###		- And the section "SETUP SYSTEMD" in the upgrade script
 
-# Store current PATH
-env_path=$PATH
 # Create a dedicated systemd config
-ynh_add_systemd_config_vars --others_var="env_path nodejs_path"
+ynh_add_systemd_config_vars --others_var="ynh_node_load_PATH ynh_node"
 
 #=================================================
 # GENERIC FINALIZATION

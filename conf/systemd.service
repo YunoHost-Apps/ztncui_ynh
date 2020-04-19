@@ -6,9 +6,9 @@ After=network.target
 Type=simple
 User=ztncui
 Group=ztncui
-Environment="PATH=__ENV_PATH__"
-WorkingDirectory=__FINALPATH__/src/
-ExecStart=__NODEJS_PATH__/npm start
+Environment="__YNH_NODE_LOAD_PATH__"
+WorkingDirectory=__FINAL_PATH__/src/
+ExecStart=__YNH_NODE__/npm start
 
 [Install]
 WantedBy=multi-user.target
