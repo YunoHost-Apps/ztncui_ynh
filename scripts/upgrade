@@ -53,6 +53,17 @@ if [ -z "$final_path" ]; then
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
+# If admin or password do not exist, assign the standard ones and have them replaced upon first login
+if [ -z "$admin" ] || [ -z "$hashedpassword" ]; then
+	admin="admin"
+	hashedpassword='$argon2i$v=19$m=4096,t=3,p=1$/VYxjWHBzbkuCEO6Hh0AUw$nJaTJtth57vCAyYvg+UbtnscilR0UcE02AfLOhERe3A'
+	pass_set="false"
+	ynh_app_setting_set --app=$app --key=admin --value=$admin
+	ynh_app_setting_set --app=$hashedpassword --key=hashedpassword --value=$hashedpassword
+else
+	pass_set="true"
+fi
+
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
@@ -157,7 +168,7 @@ echo "ZT_ADDR=localhost:$(</var/lib/zerotier-one/zerotier-one.port)" >> $env_fil
 echo "HTTP_PORT=$port" >> $env_file
 
 # Setup user credentials file
-echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":true,\"hash\":\"$hashedpassword\"}}" >> "$final_path/src/etc/passwd"
+echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":$pass_set,\"hash\":\"$hashedpassword\"}}" >> "$final_path/src/etc/passwd"
 
 #=================================================
 # LINK CERTIFICATES
@@ -166,8 +177,8 @@ echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":true,\"hash\":\"$hashedpassw
 # Even though one can stay in HTTP mode, the ztncui requires SSL certificates
 # let's use the ones of the domain
 pushd $final_path/src/etc/tls
-	cp /etc/yunohost/certs/$domain/key.pem privkey.pem
-	cp /etc/yunohost/certs/$domain/crt.pem fullchain.pem
+	cp -f /etc/yunohost/certs/$domain/key.pem privkey.pem
+	cp -f /etc/yunohost/certs/$domain/crt.pem fullchain.pem
 popd
 
 #=================================================
@@ -226,3 +237,7 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 
 ynh_script_progression --message="Upgrade of $app completed" --time --last
+
+if [ $pass_set = "false" ]; then
+	ynh_print_warn --message="Default ztncui credentials were reset: admin/password"
+fi
