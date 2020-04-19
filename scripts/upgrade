@@ -136,10 +136,10 @@ ynh_script_progression --message="Performing Node app installation..." --time --
 chown -R $app: $final_path
 
 pushd $final_path/src
-	ynh_exec_as $app $ynh_npm --loglevel=error install node-gyp
-	ynh_exec_as $app $ynh_npm --loglevel=error install
-	ynh_exec_as $app $ynh_npm --loglevel=error install argon2-cli
-	ynh_exec_as $app $ynh_npm --loglevel=error audit fix
+	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error install node-gyp
+	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error install
+	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error install argon2-cli
+	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error audit fix
 popd
 
 #=================================================
@@ -184,7 +184,7 @@ ynh_use_logrotate --non-append
 ynh_script_progression --message="Upgrading systemd configuration..." --time --weight=1
 
 # Create a dedicated systemd config
-ynh_add_systemd_config_vars --others_var="ynh_node_load_PATH ynh_node"
+ynh_add_systemd_config_vars --others_var="ynh_node_load_PATH ynh_npm"
 
 #=================================================
 # GENERIC FINALIZATION

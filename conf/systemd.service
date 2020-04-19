@@ -8,7 +8,7 @@ User=ztncui
 Group=ztncui
 Environment="__YNH_NODE_LOAD_PATH__"
 WorkingDirectory=__FINAL_PATH__/src/
-ExecStart=__YNH_NODE__/npm start
+ExecStart=__YNH_NPM__ start
 
 [Install]
 WantedBy=multi-user.target
