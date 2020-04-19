@@ -7,7 +7,7 @@ Type=simple
 User=ztncui
 Group=ztncui
 Environment="__YNH_NODE_LOAD_PATH__"
-WorkingDirectory=__FINAL_PATH__/src/
+WorkingDirectory=__FINALPATH__/src/
 ExecStart=__YNH_NPM__ start
 
 [Install]
