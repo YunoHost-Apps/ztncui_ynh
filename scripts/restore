@@ -80,7 +80,7 @@ chown -R $app: $final_path
 #=================================================
 ynh_script_progression --message="Reinstalling dependencies..." --time --weight=1
 
-ynh_install_nodejs --nodejs_version=$nodejs_version
+EXPERIMENTAL_ynh_install_nodejs --nodejs_version=$nodejs_version
 
 #=================================================
 # RESTORE SYSTEMD
