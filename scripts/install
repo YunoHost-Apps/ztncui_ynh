@@ -6,8 +6,8 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-source /usr/share/yunohost/helpers
 source _common.sh
+source /usr/share/yunohost/helpers
 
 #=================================================
 # MANAGE SCRIPT FAILURE
@@ -112,8 +112,8 @@ ynh_script_progression --message="Installing dependencies..." --time --weight=1
 
 ynh_install_app_dependencies $pkg_dependencies
 
-ynh_install_nodejs --nodejs_version=$nodejs_version
-ynh_use_nodejs
+EXPERIMENTAL_ynh_install_nodejs --nodejs_version=$nodejs_version
+EXPERIMENTAL_ynh_use_nodejs
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE

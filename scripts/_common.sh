@@ -109,7 +109,7 @@ export N_PREFIX="$n_install_dir"
 # usage: ynh_install_n
 #
 # Requires YunoHost version 2.7.12 or higher.
-ynh_install_n () {
+EXPERIMENTAL_ynh_install_n () {
 	ynh_print_info --message="Installation of N - Node.js version management"
 	# Build an app.src for n
 	mkdir -p "../conf"
@@ -160,7 +160,7 @@ SOURCE_SUM=3983fa3f00d4bf85ba8e21f1a590f6e28938093abe0bb950aeea52b1717471fc" > "
 # usage: ynh_use_nodejs
 #
 # Requires YunoHost version 2.7.12 or higher.
-ynh_use_nodejs () {
+EXPERIMENTAL_ynh_use_nodejs () {
 	nodejs_version=$(ynh_app_setting_get --app=$app --key=nodejs_version)
 
 	# Get the absolute path of this version of node
@@ -196,7 +196,7 @@ ynh_use_nodejs () {
 # Refer to ynh_use_nodejs for more information about available commands and variables
 #
 # Requires YunoHost version 2.7.12 or higher.
-ynh_install_nodejs () {
+EXPERIMENTAL_ynh_install_nodejs () {
 	# Use n, https://github.com/tj/n to manage the nodejs versions
 
 	# Declare an array to define the options of this helper.
@@ -274,7 +274,7 @@ ynh_install_nodejs () {
 # usage: ynh_remove_nodejs
 #
 # Requires YunoHost version 2.7.12 or higher.
-ynh_remove_nodejs () {
+EXPERIMENTAL_ynh_remove_nodejs () {
 	nodejs_version=$(ynh_app_setting_get --app=$app --key=nodejs_version)
 
 	# Remove the line for this app
