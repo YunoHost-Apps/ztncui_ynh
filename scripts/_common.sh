@@ -329,14 +329,14 @@ all_real_version=\$(echo "\$all_real_version" | sort --unique)
 while read version
 do
 	echo "Update of the version \$version"
-	sudo \$n_install_dir/bin/n \$version
+	\$n_install_dir/bin/n \$version
 
 	# Find the last "real" version for this major version of node.
 	real_nodejs_version=\$(find \$version_path/\$version* -maxdepth 0 | sort --version-sort | tail --lines=1)
 	real_nodejs_version=\$(basename \$real_nodejs_version)
 
 	# Update the symbolic link for this version
-	sudo ln --symbolic --force --no-target-directory \$version_path/\$real_nodejs_version \$version_path/\$version
+	ln --symbolic --force --no-target-directory \$version_path/\$real_nodejs_version \$version_path/\$version
 done <<< "\$(echo "\$all_real_version")"
 EOF
 
