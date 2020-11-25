@@ -190,6 +190,7 @@ chown -R $app: $final_path
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
 yunohost service add $app --description "ZeroTier network controller user interface" --log "/var/log/$app/$app.log"
 
