@@ -188,6 +188,12 @@ ynh_add_systemd_config_vars --others_var="ynh_node_load_PATH ynh_npm"
 chown -R $app: $final_path
 
 #=================================================
+# INTEGRATE SERVICE IN YUNOHOST
+#=================================================
+
+yunohost service add $app --description "ZeroTier network controller user interface" --log "/var/log/$app/$app.log"
+
+#=================================================
 # SETUP SSOWAT
 #=================================================
 ynh_script_progression --message="Upgrading SSOwat configuration..." --weight=1
