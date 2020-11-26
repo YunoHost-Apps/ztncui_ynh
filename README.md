@@ -23,7 +23,7 @@ No particular configuration is needed after initial installation.
 
 ## Documentation
 
- * [Official documentation](https://key-networks.com/ztncui/)
+ * Official documentation: https://key-networks.com/ztncui/
  * YunoHost documentation: If specific documentation is needed, feel free to contribute.
 
 ## YunoHost specific features
@@ -35,7 +35,7 @@ No particular configuration is needed after initial installation.
 
 #### Supported architectures
 
-* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/ztncui%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/ztncui/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/ztncui%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/ztncui/)
 * ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/ztncui%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/ztncui/)
 
 ## Limitations
@@ -58,10 +58,8 @@ https://yunohost.org/packaging_apps
 
 ---
 
-Developers info
-----------------
+## Developers info
 
-**Only if you want to use a testing branch for coding, instead of merging directly into master.**
 Please do your pull request to the [testing branch](https://github.com/YunoHost-Apps/ztncui_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
