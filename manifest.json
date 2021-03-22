@@ -14,7 +14,7 @@
 		"email": "tituspijean@outlook.com"
 	},
 	"requirements": {
-		"yunohost": ">= 3.8.1"
+		"yunohost": ">= 4.1.2"
 	},
 	"services": [],
 	"multi_instance": false,
@@ -23,10 +23,6 @@
 			{
 				"name": "domain",
 				"type": "domain",
-				"ask": {
-					"en": "Choose a domain name for ztncui",
-					"fr": "Choisissez un nom de domaine pour ztncui"
-				},
 				"help": {
 					"en": "REMINDER: ztncui needs the ZeroTier app to be already installed.",
 					"fr": "RAPPEL: ztncui nécessite que l'app ZeroTier soit déjà installée."
@@ -36,10 +32,6 @@
 			{
 				"name": "is_public",
 				"type": "boolean",
-				"ask": {
-					"en": "Is it a public application?",
-					"fr": "Est-ce une application publique ?"
-				},
 				"help": {
 					"en": "Ztncui has its own login system, but setting it as private is advised.",
 					"fr": "Ztncui a son propre système de connexion, mais la rendre privée est conseillé."
@@ -49,19 +41,11 @@
 			{
 				"name": "admin",
 				"type": "user",
-				"ask": {
-					"en": "Choose an admin user",
-					"fr": "Choisissez l’administrateur"
-				},
 				"example": "johndoe"
 			},
 			{
 				"name": "password",
 				"type": "password",
-				"ask": {
-					"en": "Set the administrator password",
-					"fr": "Définissez le mot de passe administrateur"
-				},
 				"help": {
 					"en": "It will always be asked by Ztncui, in addition to your YunoHost credentials if set to private.",
 					"fr": "Il sera toujours demandé par Ztncui, en plus des identifiants YunoHost si l'app est privée."
