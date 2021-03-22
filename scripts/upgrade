@@ -201,18 +201,6 @@ ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 yunohost service add $app --description "ZeroTier network controller user interface" --log "/var/log/$app/$app.log"
 
 #=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Upgrading SSOwat configuration..." --weight=1
-
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
-	# unprotected_uris allows SSO credentials to be passed anyway
-	ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
-fi
-
-#=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=1
