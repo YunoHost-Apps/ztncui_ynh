@@ -6,7 +6,7 @@
 		"en": "ZeroTier network controller user interface",
 		"fr": "Interface utilisateur pour le contrôleur de réseau ZeroTier"
 	},
-	"version": "0.5.8~ynh2",
+	"version": "20210310~ynh1",
 	"url": "https://key-networks.com/ztncui",
 	"license": "GPL-3.0-only",
 	"maintainer": {
