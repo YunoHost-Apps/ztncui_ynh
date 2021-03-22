@@ -21,11 +21,19 @@
 	"arguments": {
 		"install": [
 			{
+			"name": "warning",
+			"type": "display_text",
+				"ask": {
+					"en": "REMINDER: ztncui needs the ZeroTier app to be already installed.",
+					"fr": "RAPPEL: ztncui nécessite que l'app ZeroTier soit déjà installée."
+				}
+			},
+			{
 				"name": "domain",
 				"type": "domain",
 				"help": {
-					"en": "REMINDER: ztncui needs the ZeroTier app to be already installed.",
-					"fr": "RAPPEL: ztncui nécessite que l'app ZeroTier soit déjà installée."
+					"en": "Ztncui can only be installed at the root of a domain.",
+					"fr": "Ztncui ne peut être installée qu'à la racine d'un domaine."
 				},
 				"example": "zt.example.com"
 			},
