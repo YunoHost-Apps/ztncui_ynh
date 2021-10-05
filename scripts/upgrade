@@ -114,7 +114,10 @@ ynh_script_progression --message="Upgrading dependencies..." --weight=2
 
 ynh_install_app_dependencies $pkg_dependencies
 
-ynh_install_nodejs --nodejs_version=$nodejs_version
+if [ $nodejs_version != $(ynh_app_setting_get --app=$app --key=nodejs_version) ]; then
+	ynh_remove_nodejs
+	ynh_install_nodejs --nodejs_version=$nodejs_version
+fi
 
 #=================================================
 # CREATE DEDICATED USER
