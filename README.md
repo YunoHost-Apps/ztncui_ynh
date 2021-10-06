@@ -15,11 +15,29 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 ## Overview
 
-ZeroTier network controller user interface
+ztncui is a web user interface for a standalone ZeroTier network controller.
+It allows you to take control of your own ZeroTier network without relying on the publisher's cloud-based controller.
+
+
 
 **Shipped version:** 20210310~ynh1
 
 
+
+## Screenshots
+
+![](./doc/screenshots/screenshot.jpg)
+
+## Disclaimers / important information
+
+### Dependency
+
+* [ZeroTier for YunoHost](https://github.com/YunoHost-Apps/zerotier_ynh) has to be installed beforehand.
+
+### Multi-users support
+
+ * LDAP and HTTP auth are not supported.
+ * Multiple users can use the app, you have to add them manually in `/opt/key-networks/ztncui/src/etc/passwd`, see ztncui's documentation.
 
 ## Documentation and resources
 
