@@ -142,7 +142,7 @@ pushd $final_path/src
 	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error install node-gyp
 	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error install
 	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error install argon2-cli
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error audit fix
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error audit fix --force
 popd
 
 #=================================================
