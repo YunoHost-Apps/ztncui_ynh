@@ -139,10 +139,10 @@ chown -R $app: $final_path
 ynh_use_nodejs
 
 pushd $final_path/src
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error install node-gyp
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error install
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error install argon2-cli
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error audit fix --force
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME=$final_path $ynh_npm --loglevel=error install node-gyp
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME=$final_path $ynh_npm --loglevel=error install argon2-cli
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME=$final_path $ynh_npm --loglevel=error install
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME=$final_path $ynh_npm --loglevel=error audit fix --force
 popd
 
 #=================================================
