@@ -114,7 +114,10 @@ ynh_script_progression --message="Upgrading dependencies..." --weight=2
 
 ynh_install_app_dependencies $pkg_dependencies
 
-ynh_install_nodejs --nodejs_version=$nodejs_version
+if [ $nodejs_version != $(ynh_app_setting_get --app=$app --key=nodejs_version) ]; then
+	ynh_remove_nodejs
+	ynh_install_nodejs --nodejs_version=$nodejs_version
+fi
 
 #=================================================
 # CREATE DEDICATED USER
@@ -133,11 +136,13 @@ ynh_script_progression --message="Performing Node app installation..." --weight=
 
 chown -R $app: $final_path
 
+ynh_use_nodejs
+
 pushd $final_path/src
-	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error install node-gyp
-	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error install
-	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error install argon2-cli
-	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm --loglevel=error audit fix
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME=$final_path $ynh_npm install node-gyp
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME=$final_path $ynh_npm install argon2-cli
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME=$final_path $ynh_npm install
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME=$final_path $ynh_npm audit fix --force
 popd
 
 #=================================================

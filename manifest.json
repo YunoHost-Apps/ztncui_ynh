@@ -6,15 +6,20 @@
 		"en": "ZeroTier network controller user interface",
 		"fr": "Interface utilisateur pour le contrôleur de réseau ZeroTier"
 	},
-	"version": "20210310~ynh1",
+	"version": "20210310~ynh2",
 	"url": "https://key-networks.com/ztncui",
+	"upstream": {
+		"license": "GPL-3.0-only",
+		"website": "https://key-networks.com/ztncui/",
+		"code": "https://github.com/key-networks/ztncui"
+	},
 	"license": "GPL-3.0-only",
 	"maintainer": {
 		"name": "tituspijean",
 		"email": "tituspijean@outlook.com"
 	},
 	"requirements": {
-		"yunohost": ">= 4.1.2"
+		"yunohost": ">= 4.1.7"
 	},
 	"services": [],
 	"multi_instance": false,
@@ -34,8 +39,7 @@
 				"help": {
 					"en": "Ztncui can only be installed at the root of a domain.",
 					"fr": "Ztncui ne peut être installée qu'à la racine d'un domaine."
-				},
-				"example": "zt.example.com"
+				}
 			},
 			{
 				"name": "is_public",
@@ -48,8 +52,7 @@
 			},
 			{
 				"name": "admin",
-				"type": "user",
-				"example": "johndoe"
+				"type": "user"
 			},
 			{
 				"name": "password",
@@ -57,8 +60,7 @@
 				"help": {
 					"en": "It will always be asked by Ztncui, in addition to your YunoHost credentials if set to private.",
 					"fr": "Il sera toujours demandé par Ztncui, en plus des identifiants YunoHost si l'app est privée."
-				},
-				"example": "Choose a password"
+				}
 			}
 		]
 	}
