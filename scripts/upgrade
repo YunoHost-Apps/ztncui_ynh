@@ -34,12 +34,6 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
-# If db_name doesn't exist, create it
-if [ -z "$db_name" ]; then
-	db_name=$(ynh_sanitize_dbid --db_name=$app)
-	ynh_app_setting_set --app=$app --key=db_name --value=$db_name
-fi
-
 # If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
 	final_path=/var/www/$app
@@ -60,6 +54,9 @@ if [ -z "$admin" ] || [ -z "$hashedpassword" ]; then
 	pass_set="false"
 	ynh_app_setting_set --app=$app --key=admin --value=$admin
 	ynh_app_setting_set --app=$hashedpassword --key=hashedpassword --value=$hashedpassword
+
+        # Setup user credentials file
+        echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":$pass_set,\"hash\":\"$hashedpassword\"}}" > "$final_path/src/etc/passwd"
 else
 	pass_set="true"
 fi
@@ -149,18 +146,13 @@ popd
 # MODIFY A CONFIG FILE
 #=================================================
 
-# Setup env file
-mkdir -p $final_path
-env_file=$final_path/src/.env
-touch $env_file
-chmod 600 $env_file
+# Let's retrieve information on the ZeroTier installation
+zt_token="$(</var/lib/zerotier-one/authtoken.secret)"
+zt_addr="localhost:$(</var/lib/zerotier-one/zerotier-one.port)"
 
-echo "ZT_TOKEN=$(</var/lib/zerotier-one/authtoken.secret)" >> $env_file
-echo "ZT_ADDR=localhost:$(</var/lib/zerotier-one/zerotier-one.port)" >> $env_file
-echo "HTTP_PORT=$port" >> $env_file
-
-# Setup user credentials file
-echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":$pass_set,\"hash\":\"$hashedpassword\"}}" >> "$final_path/src/etc/passwd"
+ynh_add_config --template="env" --destination="$final_path/src/.env"
+chown $app:$app "$final_path/src/.env"
+chmod 600 "$final_path/src/.env"
 
 #=================================================
 # LINK CERTIFICATES
