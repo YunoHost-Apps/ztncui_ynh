@@ -120,19 +120,17 @@ popd
 # MODIFY A CONFIG FILE
 #=================================================
 
-# Setup env file
-mkdir -p $final_path
-env_file=$final_path/src/.env
-touch $env_file
-chmod 600 $env_file
+# Let's retrieve information on the ZeroTier installation
+ZT_TOKEN="$(</var/lib/zerotier-one/authtoken.secret)"
+ZT_ADDR="localhost:$(</var/lib/zerotier-one/zerotier-one.port)"
 
-echo "ZT_TOKEN=$(</var/lib/zerotier-one/authtoken.secret)" >> $env_file
-echo "ZT_ADDR=localhost:$(</var/lib/zerotier-one/zerotier-one.port)" >> $env_file
-echo "HTTP_PORT=$port" >> $env_file
+ynh_add_config --template="env" --destination="$final_path/.env"
+chown $app:$app "$final_path/.env"
+chmod 600 "$final_path/.env"
 
 # Setup user credentials file
 hashedpassword=$(echo -n "$password" | $final_path/src/node_modules/.bin/argon2-cli -e)
-echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":true,\"hash\":\"$hashedpassword\"}}" >> "$final_path/src/etc/passwd"
+echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":true,\"hash\":\"$hashedpassword\"}}" > "$final_path/src/etc/passwd"
 
 # Store user settings
 ynh_app_setting_set --app=$app --key=admin --value=$admin
