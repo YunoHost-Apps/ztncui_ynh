@@ -60,6 +60,9 @@ if [ -z "$admin" ] || [ -z "$hashedpassword" ]; then
 	pass_set="false"
 	ynh_app_setting_set --app=$app --key=admin --value=$admin
 	ynh_app_setting_set --app=$hashedpassword --key=hashedpassword --value=$hashedpassword
+
+        # Setup user credentials file
+        echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":$pass_set,\"hash\":\"$hashedpassword\"}}" > "$final_path/src/etc/passwd"
 else
 	pass_set="true"
 fi
@@ -158,9 +161,6 @@ chmod 600 $env_file
 echo "ZT_TOKEN=$(</var/lib/zerotier-one/authtoken.secret)" >> $env_file
 echo "ZT_ADDR=localhost:$(</var/lib/zerotier-one/zerotier-one.port)" >> $env_file
 echo "HTTP_PORT=$port" >> $env_file
-
-# Setup user credentials file
-echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":$pass_set,\"hash\":\"$hashedpassword\"}}" >> "$final_path/src/etc/passwd"
 
 #=================================================
 # LINK CERTIFICATES
