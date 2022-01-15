@@ -146,15 +146,13 @@ popd
 # MODIFY A CONFIG FILE
 #=================================================
 
-# Setup env file
-mkdir -p $final_path
-env_file=$final_path/src/.env
-touch $env_file
-chmod 600 $env_file
+# Let's retrieve information on the ZeroTier installation
+zt_token="$(</var/lib/zerotier-one/authtoken.secret)"
+zt_addr="localhost:$(</var/lib/zerotier-one/zerotier-one.port)"
 
-echo "ZT_TOKEN=$(</var/lib/zerotier-one/authtoken.secret)" >> $env_file
-echo "ZT_ADDR=localhost:$(</var/lib/zerotier-one/zerotier-one.port)" >> $env_file
-echo "HTTP_PORT=$port" >> $env_file
+ynh_add_config --template="env" --destination="$final_path/.env"
+chown $app:$app "$final_path/.env"
+chmod 600 "$final_path/.env"
 
 #=================================================
 # LINK CERTIFICATES

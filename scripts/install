@@ -121,8 +121,8 @@ popd
 #=================================================
 
 # Let's retrieve information on the ZeroTier installation
-ZT_TOKEN="$(</var/lib/zerotier-one/authtoken.secret)"
-ZT_ADDR="localhost:$(</var/lib/zerotier-one/zerotier-one.port)"
+zt_token="$(</var/lib/zerotier-one/authtoken.secret)"
+zt_addr="localhost:$(</var/lib/zerotier-one/zerotier-one.port)"
 
 ynh_add_config --template="env" --destination="$final_path/.env"
 chown $app:$app "$final_path/.env"
