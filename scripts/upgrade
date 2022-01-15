@@ -150,9 +150,9 @@ popd
 zt_token="$(</var/lib/zerotier-one/authtoken.secret)"
 zt_addr="localhost:$(</var/lib/zerotier-one/zerotier-one.port)"
 
-ynh_add_config --template="env" --destination="$final_path/.env"
-chown $app:$app "$final_path/.env"
-chmod 600 "$final_path/.env"
+ynh_add_config --template="env" --destination="$final_path/src/.env"
+chown $app:$app "$final_path/src/.env"
+chmod 600 "$final_path/src/.env"
 
 #=================================================
 # LINK CERTIFICATES
