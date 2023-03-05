@@ -9,7 +9,7 @@
 			path="/"
 			admin="john"
 			is_public=1
-			password="pass"
+			password="DaB3estPa$$w0rd"
 	; Checks
 			pkg_linter=1
 			setup_sub_dir=0
