@@ -3,13 +3,13 @@
 
 ;; Test complet
 	; pre-install
-			sudo yunohost app install https://github.com/tituspijean/zerotier_ynh --force
+			sudo yunohost app install https://github.com/YunoHost-Apps/zerotier_ynh --force
 	; Manifest
 			domain="domain.tld"
 			path="/"
 			admin="john"
 			is_public=1
-			password="pass"
+			password="DaB3estPassw0rd"
 	; Checks
 			pkg_linter=1
 			setup_sub_dir=0
@@ -26,4 +26,4 @@
 ;;; Upgrade options
 	; commit=CommitHash
 		name=Name and date of the commit.
-		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=pass&port=666&
+		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=DaB3estPassw0rd&port=666&

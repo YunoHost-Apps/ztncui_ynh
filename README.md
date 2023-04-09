@@ -5,7 +5,8 @@ It shall NOT be edited by hand.
 
 # Zerotier UI for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/ztncui.svg)](https://dash.yunohost.org/appci/app/ztncui) ![](https://ci-apps.yunohost.org/ci/badges/ztncui.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/ztncui.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/ztncui.svg)](https://dash.yunohost.org/appci/app/ztncui) ![Working status](https://ci-apps.yunohost.org/ci/badges/ztncui.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/ztncui.maintain.svg)
+
 [![Install Zerotier UI with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ztncui)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -22,11 +23,9 @@ It allows you to take control of your own ZeroTier network without relying on th
 
 **Shipped version:** 20220103~ynh4
 
-
-
 ## Screenshots
 
-![](./doc/screenshots/screenshot.jpg)
+![Screenshot of Zerotier UI](./doc/screenshots/screenshot.jpg)
 
 ## Disclaimers / important information
 
@@ -39,22 +38,27 @@ It allows you to take control of your own ZeroTier network without relying on th
  * LDAP and HTTP auth are not supported.
  * Multiple users can use the app, you have to add them manually in `/opt/key-networks/ztncui/src/etc/passwd`, see ztncui's documentation.
 
+## :red_circle: Antifeatures
+
+- **Non-free dependencies**: Relies on software dependencies that are not free in order to run.
+
 ## Documentation and resources
 
-* Official app website: https://key-networks.com/ztncui/
-* Upstream app code repository: https://github.com/key-networks/ztncui
-* YunoHost documentation for this app: https://yunohost.org/app_ztncui
-* Report a bug: https://github.com/YunoHost-Apps/ztncui_ynh/issues
+* Official app website: <https://key-networks.com/ztncui/>
+* Upstream app code repository: <https://github.com/key-networks/ztncui>
+* YunoHost documentation for this app: <https://yunohost.org/app_ztncui>
+* Report a bug: <https://github.com/YunoHost-Apps/ztncui_ynh/issues>
 
 ## Developer info
 
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/ztncui_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
-```
+
+``` bash
 sudo yunohost app install https://github.com/YunoHost-Apps/ztncui_ynh/tree/testing --debug
 or
 sudo yunohost app upgrade ztncui -u https://github.com/YunoHost-Apps/ztncui_ynh/tree/testing --debug
 ```
 
-**More info regarding app packaging:** https://yunohost.org/packaging_apps
+**More info regarding app packaging:** <https://yunohost.org/packaging_apps>
