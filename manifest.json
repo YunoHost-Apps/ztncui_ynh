@@ -27,7 +27,7 @@
 		"install": [
 			{
 			"name": "warning",
-			"type": "display_text",
+			"type": "alert",
 				"ask": {
 					"en": "REMINDER: ztncui needs the ZeroTier app to be already installed.",
 					"fr": "RAPPEL: ztncui nécessite que l'app ZeroTier soit déjà installée."
