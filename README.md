@@ -21,7 +21,7 @@ It allows you to take control of your own ZeroTier network without relying on th
 
 
 
-**Shipped version:** 20220103~ynh4
+**Shipped version:** 20230311~ynh1
 
 ## Screenshots
 

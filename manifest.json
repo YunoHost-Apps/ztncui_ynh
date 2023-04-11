@@ -6,7 +6,7 @@
 		"en": "ZeroTier network controller user interface",
 		"fr": "Interface utilisateur pour le contrôleur de réseau ZeroTier"
 	},
-	"version": "20220103~ynh4",
+	"version": "20230311~ynh1",
 	"url": "https://key-networks.com/ztncui",
 	"upstream": {
 		"license": "GPL-3.0-only",
@@ -19,7 +19,7 @@
 		"email": "tituspijean@outlook.com"
 	},
 	"requirements": {
-		"yunohost": ">= 4.1.7"
+		"yunohost": ">= 4.3"
 	},
 	"services": [],
 	"multi_instance": false,
@@ -27,7 +27,7 @@
 		"install": [
 			{
 			"name": "warning",
-			"type": "display_text",
+			"type": "alert",
 				"ask": {
 					"en": "REMINDER: ztncui needs the ZeroTier app to be already installed.",
 					"fr": "RAPPEL: ztncui nécessite que l'app ZeroTier soit déjà installée."
