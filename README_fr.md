@@ -46,7 +46,7 @@ It allows you to take control of your own ZeroTier network without relying on th
 
 * Site officiel de l’app : <https://key-networks.com/ztncui/>
 * Dépôt de code officiel de l’app : <https://github.com/key-networks/ztncui>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_ztncui>
+* YunoHost Store: <https://apps.yunohost.org/app/ztncui>
 * Signaler un bug : <https://github.com/YunoHost-Apps/ztncui_ynh/issues>
 
 ## Informations pour les développeurs
