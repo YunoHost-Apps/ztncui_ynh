@@ -31,7 +31,7 @@ if [ -z "${admin:-}" ] || [ -z "${hashedpassword:-}" ]; then
     hashedpassword='$argon2i$v=19$m=4096,t=3,p=1$/VYxjWHBzbkuCEO6Hh0AUw$nJaTJtth57vCAyYvg+UbtnscilR0UcE02AfLOhERe3A'
     pass_set="false"
     ynh_app_setting_set --app="$app" --key="admin" --value="$admin"
-    ynh_app_setting_set --app="$hashedpassword" --key="hashedpassword" --value="$hashedpassword"
+    ynh_app_setting_set --app="$app" --key="hashedpassword" --value="$hashedpassword"
 
     # Setup user credentials file
     echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":$pass_set,\"hash\":\"$hashedpassword\"}}" > "$install_dir/src/etc/passwd"
