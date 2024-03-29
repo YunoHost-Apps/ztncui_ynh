@@ -1,0 +1,67 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
+packaging_format = 2
+
+id = "ztncui"
+name = "Zerotier UI"
+description.en = "ZeroTier network controller user interface"
+description.fr = "Interface utilisateur pour le contrôleur de réseau ZeroTier"
+
+version = "20230311~ynh2"
+
+maintainers = ["tituspijean"]
+
+[upstream]
+license = "GPL-3.0-only"
+website = "https://key-networks.com/ztncui/"
+code = "https://github.com/key-networks/ztncui"
+
+[integration]
+yunohost = ">=11.2"
+architectures = "all"
+multi_instance = false
+ldap = false
+sso = false
+disk = "50M" # FIXME: replace with an **estimate** minimum disk requirement. e.g. 20M, 400M, 1G, ...
+ram.build = "50M" # FIXME: replace with an **estimate** minimum ram requirement. e.g. 50M, 400M, 1G, ...
+ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requirement. e.g. 50M, 400M, 1G, ...
+
+[install]
+    [install.domain]
+    help.en = "Ztncui can only be installed at the root of a domain."
+    help.fr = "Ztncui ne peut être installée qu'à la racine d'un domaine."
+    type = "domain"
+
+    [install.init_main_permission]
+    help.en = "Ztncui has its own login system, but setting it as private is advised."
+    help.fr = "Ztncui a son propre système de connexion, mais la rendre privée est conseillé."
+    type = "group"
+    default = false
+
+    [install.admin]
+    type = "user"
+
+    [install.password]
+    help.en = "It will always be asked by Ztncui, in addition to your YunoHost credentials if set to private."
+    help.fr = "Il sera toujours demandé par Ztncui, en plus des identifiants YunoHost si l'app est privée."
+    type = "password"
+
+[resources]
+    [resources.sources.main]
+    url = "https://github.com/key-networks/ztncui/archive/42248c13593e90f62238ee79ea5708a54eacf753.zip"
+    sha256 = "596450af9f567d64ebdd488f0f379e3bfc0bb569edea6c832adf0dc3da693f0f"
+
+    autoupdate.strategy = "latest_github_commit"
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.permissions]
+    main.url = "/"
+
+    [resources.ports]
+    main.default = 8095
+
+    [resources.apt]
+    packages = ["g++"]
