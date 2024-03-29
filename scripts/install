@@ -36,7 +36,8 @@ ynh_script_progression --message="Setting up source files..." --weight=2
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir"
 
-chown -R "$app:" "$install_dir"
+chmod -R o-rwx "$install_dir"
+chown -R "$app:$app" "$install_dir"
 
 #=================================================
 # APP INITIAL CONFIGURATION
