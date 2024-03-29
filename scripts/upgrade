@@ -1,8 +1,6 @@
 #!/bin/bash
 
 #=================================================
-# GENERIC START
-#=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
 
@@ -10,206 +8,114 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
-#=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
-
-app=$YNH_APP_INSTANCE_NAME
-
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-port=$(ynh_app_setting_get --app=$app --key=port)
-admin=$(ynh_app_setting_get --app=$app --key=admin)
-hashedpassword=$(ynh_app_setting_get --app=$app --key=hashedpassword)
-
-#=================================================
-# CHECK VERSION
+# INITIALIZE AND STORE SETTINGS
 #=================================================
 
-upgrade_type=$(ynh_check_app_version_changed)
+# Testing if ZeroTier is installed
+if ! yunohost app list | grep -q "id: zerotier"; then
+    ynh_die "ZeroTier is needed, but it is not installed. There is a package for that!"
+fi
+
+# Let's retrieve information on the ZeroTier installation
+zt_token="$(</var/lib/zerotier-one/authtoken.secret)"
+zt_addr="localhost:$(</var/lib/zerotier-one/zerotier-one.port)"
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
-# If final_path doesn't exist, create it
-if [ -z "$final_path" ]; then
-	final_path=/var/www/$app
-	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-fi
-
-# Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
-
-	ynh_app_setting_delete --app=$app --key=is_public
-fi
-
 # If admin or password do not exist, assign the standard ones and have them replaced upon first login
-if [ -z "$admin" ] || [ -z "$hashedpassword" ]; then
-	admin="admin"
-	hashedpassword='$argon2i$v=19$m=4096,t=3,p=1$/VYxjWHBzbkuCEO6Hh0AUw$nJaTJtth57vCAyYvg+UbtnscilR0UcE02AfLOhERe3A'
-	pass_set="false"
-	ynh_app_setting_set --app=$app --key=admin --value=$admin
-	ynh_app_setting_set --app=$hashedpassword --key=hashedpassword --value=$hashedpassword
+if [ -z "${admin:-}" ] || [ -z "${hashedpassword:-}" ]; then
+    admin="admin"
+    hashedpassword='$argon2i$v=19$m=4096,t=3,p=1$/VYxjWHBzbkuCEO6Hh0AUw$nJaTJtth57vCAyYvg+UbtnscilR0UcE02AfLOhERe3A'
+    pass_set="false"
+    ynh_app_setting_set --app="$app" --key="admin" --value="$admin"
+    ynh_app_setting_set --app="$hashedpassword" --key="hashedpassword" --value="$hashedpassword"
 
-        # Setup user credentials file
-        echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":$pass_set,\"hash\":\"$hashedpassword\"}}" > "$final_path/src/etc/passwd"
+    # Setup user credentials file
+    echo "{\"$admin\":{\"name\":\"$admin\",\"pass_set\":$pass_set,\"hash\":\"$hashedpassword\"}}" > "$install_dir/src/etc/passwd"
 else
-	pass_set="true"
+    pass_set="true"
 fi
 
-#=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=3
-
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-	# restore it if the upgrade fails
-	ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
-#=================================================
-# STANDARD UPGRADE STEPS
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping a systemd service..." --weight=1
+ynh_script_progression --message="Stopping $app's systemd service..." --weight=1
 
-ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name="$app" --action="stop" --log_path="/var/log/$app/$app.log"
+
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Upgrading NodeJS..." --weight=2
+
+ynh_install_nodejs --nodejs_version="$nodejs_version"
+ynh_use_nodejs
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
+ynh_script_progression --message="Upgrading source files..." --weight=1
 
-if [ "$upgrade_type" == "UPGRADE_APP" ]
-then
-	ynh_script_progression --message="Upgrading source files..." --weight=1
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source --dest_dir="$install_dir" --full_replace=1
 
-	# Download, check integrity, uncompress and patch the source from app.src
-	ynh_setup_source --dest_dir="$final_path"
-fi
+chown -R "$app:$app" "$install_dir"
 
 #=================================================
-# NGINX CONFIGURATION
+# UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Upgrading nginx web server configuration..." --weight=1
+ynh_script_progression --message="Updating $app's configuration files..." --weight=1
 
-# Create a dedicated nginx config
-ynh_add_nginx_config
+ynh_add_config --template="env" --destination="$install_dir/src/.env"
 
-#=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=2
+chown "$app:$app" "$install_dir/src/.env"
+chmod 600 "$install_dir/src/.env"
 
-ynh_install_app_dependencies $pkg_dependencies
-
-if [ $nodejs_version != $(ynh_app_setting_get --app=$app --key=nodejs_version) ]; then
-	ynh_remove_nodejs
-	ynh_install_nodejs --nodejs_version=$nodejs_version
-fi
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create $app $final_path
-
-#=================================================
-# SPECIFIC UPGRADE
 #=================================================
 # NPM INSTALL
 #=================================================
-ynh_script_progression --message="Performing Node app installation..." --weight=3
+ynh_script_progression --message="Building $app..." --weight=3
 
-chown -R $app: $final_path
-
-ynh_use_nodejs
-
-pushd $final_path/src
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME=$final_path $ynh_npm install node-gyp
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME=$final_path $ynh_npm install argon2-cli
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME=$final_path $ynh_npm install
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME=$final_path $ynh_npm audit fix
+pushd "$install_dir/src"
+    ynh_exec_warn_less ynh_exec_as "$app" "$ynh_node_load_PATH" "HOME=$install_dir" "$ynh_npm" install node-gyp
+    ynh_exec_warn_less ynh_exec_as "$app" "$ynh_node_load_PATH" "HOME=$install_dir" "$ynh_npm" install argon2-cli
+    ynh_exec_warn_less ynh_exec_as "$app" "$ynh_node_load_PATH" "HOME=$install_dir" "$ynh_npm" install
+    ynh_exec_warn_less ynh_exec_as "$app" "$ynh_node_load_PATH" "HOME=$install_dir" "$ynh_npm" audit fix
 popd
-
-#=================================================
-# MODIFY A CONFIG FILE
-#=================================================
-
-# Let's retrieve information on the ZeroTier installation
-zt_token="$(</var/lib/zerotier-one/authtoken.secret)"
-zt_addr="localhost:$(</var/lib/zerotier-one/zerotier-one.port)"
-
-ynh_add_config --template="env" --destination="$final_path/src/.env"
-chown $app:$app "$final_path/src/.env"
-chmod 600 "$final_path/src/.env"
 
 #=================================================
 # LINK CERTIFICATES
 #=================================================
 
 # Even though one can stay in HTTP mode, the ztncui requires SSL certificates
-# let's use the ones of the domain
-pushd $final_path/src/etc/tls
-	cp -f /etc/yunohost/certs/$domain/key.pem privkey.pem
-	cp -f /etc/yunohost/certs/$domain/crt.pem fullchain.pem
-popd
+# let's use the ones of the domain
+cp "/etc/yunohost/certs/$domain/key.pem" "$install_dir/src/etc/tls/privkey.pem"
+cp "/etc/yunohost/certs/$domain/crt.pem" "$install_dir/src/etc/tls/fullchain.pem"
 
 #=================================================
-# SETUP LOGROTATE
+# REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading logrotate configuration..." --weight=1
+ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
+
+# Create a dedicated nginx config
+ynh_add_nginx_config
+
+# Create a dedicated systemd config
+ynh_add_systemd_config
+yunohost service add "$app" --description "ZeroTier network controller user interface" --log "/var/log/$app/$app.log"
 
 # Use logrotate to manage app-specific logfile(s)
 ynh_use_logrotate --non-append
 
 #=================================================
-# SETUP SYSTEMD
-#=================================================
-ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
-
-# Create a dedicated systemd config
-ynh_add_systemd_config
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-
-# Set permissions on app files
-chown -R $app: $final_path
-
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
-
-yunohost service add $app --description "ZeroTier network controller user interface" --log "/var/log/$app/$app.log"
-
-#=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=1
+ynh_script_progression --message="Starting $app's systemd service..." --weight=1
 
-ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app/$app.log"
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-
-ynh_systemd_action --service_name=nginx --action=reload
+ynh_systemd_action --service_name="$app" --action="start" --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # END OF SCRIPT
@@ -218,5 +124,5 @@ ynh_systemd_action --service_name=nginx --action=reload
 ynh_script_progression --message="Upgrade of $app completed" --last
 
 if [ $pass_set = "false" ]; then
-	ynh_print_warn --message="Default ztncui credentials were reset: admin/password"
+    ynh_print_warn --message="Default ztncui credentials were reset: admin/password"
 fi
