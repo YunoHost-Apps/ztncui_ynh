@@ -21,22 +21,11 @@ It allows you to take control of your own ZeroTier network without relying on th
 
 
 
-**Versione pubblicata:** 20230311~ynh1
+**Versione pubblicata:** 20230311~ynh2
 
 ## Screenshot
 
 ![Screenshot di Zerotier UI](./doc/screenshots/screenshot.jpg)
-
-## Attenzione/informazioni importanti
-
-### Dependency
-
-* [ZeroTier for YunoHost](https://github.com/YunoHost-Apps/zerotier_ynh) has to be installed beforehand.
-
-### Multi-users support
-
- * LDAP and HTTP auth are not supported.
- * Multiple users can use the app, you have to add them manually in `/opt/key-networks/ztncui/src/etc/passwd`, see ztncui's documentation.
 
 ## :red_circle: Anti-funzionalità
 
