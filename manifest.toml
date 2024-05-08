@@ -36,7 +36,7 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     help.en = "Ztncui has its own login system, but setting it as private is advised."
     help.fr = "Ztncui a son propre système de connexion, mais la rendre privée est conseillé."
     type = "group"
-    default = false
+    default = "visitors"
 
     [install.admin]
     type = "user"
