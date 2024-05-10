@@ -29,7 +29,7 @@ It allows you to take control of your own ZeroTier network without relying on th
 
 ## :red_circle: Anti-fonctionnalités
 
-- **Dépendances non libres**: Dépend pour fonctionner de dépendances logicielles non libres.
+- **Dépendances non libres **: Dépend pour fonctionner de dépendances logicielles non libres.
 
 ## Documentations et ressources
 
