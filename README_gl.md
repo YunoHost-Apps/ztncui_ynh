@@ -27,7 +27,7 @@ It allows you to take control of your own ZeroTier network without relying on th
 
 ![Captura de pantalla de Zerotier UI](./doc/screenshots/screenshot.jpg)
 
-## :red_circle: Caraterísticas cuestionables
+## :red_circle: Debes considerar
 
 - **Non-free dependencies**: Relies on software dependencies that are not free in order to run.
 
