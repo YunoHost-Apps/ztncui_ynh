@@ -58,7 +58,6 @@ pushd "$install_dir/src"
     ynh_exec_warn_less ynh_exec_as "$app" "$ynh_node_load_PATH" "$ynh_npm" install node-gyp
     ynh_exec_warn_less ynh_exec_as "$app" "$ynh_node_load_PATH" "$ynh_npm" install argon2-cli
     ynh_exec_warn_less ynh_exec_as "$app" "$ynh_node_load_PATH" "$ynh_npm" install
- #   ynh_exec_warn_less ynh_exec_as "$app" "$ynh_node_load_PATH" "$ynh_npm" audit fix
 popd
 
 # Setup user credentials file
