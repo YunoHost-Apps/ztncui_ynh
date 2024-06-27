@@ -5,7 +5,7 @@
 
 # YunoHost 上的 Zerotier UI
 
-[![集成程度](https://dash.yunohost.org/integration/ztncui.svg)](https://dash.yunohost.org/appci/app/ztncui) ![工作状态](https://ci-apps.yunohost.org/ci/badges/ztncui.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/ztncui.maintain.svg)
+[![集成程度](https://dash.yunohost.org/integration/ztncui.svg)](https://ci-apps.yunohost.org/ci/apps/ztncui/) ![工作状态](https://ci-apps.yunohost.org/ci/badges/ztncui.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/ztncui.maintain.svg)
 
 [![使用 YunoHost 安装 Zerotier UI](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ztncui)
 

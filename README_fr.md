@@ -5,7 +5,7 @@ Il NE doit PAS être modifié à la main.
 
 # Zerotier UI pour YunoHost
 
-[![Niveau d’intégration](https://dash.yunohost.org/integration/ztncui.svg)](https://dash.yunohost.org/appci/app/ztncui) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/ztncui.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/ztncui.maintain.svg)
+[![Niveau d’intégration](https://dash.yunohost.org/integration/ztncui.svg)](https://ci-apps.yunohost.org/ci/apps/ztncui/) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/ztncui.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/ztncui.maintain.svg)
 
 [![Installer Zerotier UI avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ztncui)
 

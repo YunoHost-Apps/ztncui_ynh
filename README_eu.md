@@ -5,7 +5,7 @@ EZ editatu eskuz.
 
 # Zerotier UI YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/ztncui.svg)](https://dash.yunohost.org/appci/app/ztncui) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/ztncui.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/ztncui.maintain.svg)
+[![Integrazio maila](https://dash.yunohost.org/integration/ztncui.svg)](https://ci-apps.yunohost.org/ci/apps/ztncui/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/ztncui.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/ztncui.maintain.svg)
 
 [![Instalatu Zerotier UI YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ztncui)
 
