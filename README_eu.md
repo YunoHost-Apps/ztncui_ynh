@@ -5,7 +5,9 @@ EZ editatu eskuz.
 
 # Zerotier UI YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/ztncui.svg)](https://ci-apps.yunohost.org/ci/apps/ztncui/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/ztncui.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/ztncui.maintain.svg)
+[![Integrazio maila](https://apps.yunohost.org/badge/integration/ztncui)](https://ci-apps.yunohost.org/ci/apps/ztncui/)
+![Funtzionamendu egoera](https://apps.yunohost.org/badge/state/ztncui)
+![Mantentze egoera](https://apps.yunohost.org/badge/maintained/ztncui)
 
 [![Instalatu Zerotier UI YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ztncui)
 
@@ -20,8 +22,7 @@ ztncui is a web user interface for a standalone ZeroTier network controller.
 It allows you to take control of your own ZeroTier network without relying on the publisher's cloud-based controller.
 
 
-
-**Paketatutako bertsioa:** 20230311~ynh2
+**Paketatutako bertsioa:** 20230311~ynh3
 
 ## Pantaila-argazkiak
 
