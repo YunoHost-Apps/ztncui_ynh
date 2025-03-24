@@ -4,10 +4,22 @@ test_format = 1.0
 
 [default]
 
+    # ------------
+    # Tests to run
+    # ------------
+
     preinstall = """
         sudo yunohost tools update apps
         sudo yunohost app install https://github.com/YunoHost-Apps/zerotier_ynh --force
     """
 
+    # -------------------------------
+    # Default args to use for install
+    # -------------------------------
 
-    test_upgrade_from.3678d9bb24cc8ec74eff31ea255a1f38b031f2c8.name = "Packaging v1"
+    # -------------------------------
+    # Commits to test upgrade from
+    # -------------------------------
+
+    # test_upgrade_from.3678d9bb24cc8ec74eff31ea255a1f38b031f2c8.name = "Packaging v1"
+    test_upgrade_from.7595edaa468a585263f9f6ff94f5c3c12e30060f.name = "Upgrade from 20230311~ynh2"
