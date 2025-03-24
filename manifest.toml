@@ -7,7 +7,7 @@ name = "Zerotier UI"
 description.en = "ZeroTier network controller user interface"
 description.fr = "Interface utilisateur pour le contrôleur de réseau ZeroTier"
 
-version = "20230311~ynh2"
+version = "20230311~ynh3"
 
 maintainers = ["tituspijean"]
 
