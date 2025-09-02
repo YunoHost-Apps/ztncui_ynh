@@ -4,7 +4,7 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-source _common.sh
+
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -23,10 +23,10 @@ zt_addr="localhost:$(</var/lib/zerotier-one/zerotier-one.port)"
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing NodeJS..." --weight=2
+#REMOVEME? ynh_script_progression --message="Installing NodeJS..." --weight=2
 
-ynh_install_nodejs --nodejs_version="$nodejs_version"
-ynh_use_nodejs
+#REMOVEME? ynh_install_nodejs --#REMOVEME? nodejs_version="$nodejs_version"
+#REMOVEME? ynh_use_nodejs
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE

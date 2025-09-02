@@ -4,16 +4,16 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-source ../settings/scripts/_common.sh
+
 source /usr/share/yunohost/helpers
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing NodeJS..." --weight=2
+#REMOVEME? ynh_script_progression --message="Installing NodeJS..." --weight=2
 
-ynh_install_nodejs --nodejs_version="$nodejs_version"
-ynh_use_nodejs
+#REMOVEME? ynh_install_nodejs --#REMOVEME? nodejs_version="$nodejs_version"
+#REMOVEME? ynh_use_nodejs
 
 #=================================================
 # RESTORE THE APP MAIN DIR
