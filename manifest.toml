@@ -18,6 +18,7 @@ code = "https://github.com/key-networks/ztncui"
 
 [integration]
 yunohost = ">=11.2"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
 ldap = false
@@ -65,3 +66,6 @@ ram.runtime = "100M"
 
     [resources.apt]
     packages = "gcc, g++, node-gyp"
+
+    [resources.nodejs]
+    version = "16"

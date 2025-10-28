@@ -6,9 +6,9 @@ After=network.target
 Type=simple
 User=__APP__
 Group=__APP__
-Environment="__YNH_NODE_LOAD_PATH__"
+Environment="PATH=__PATH_WITH_NODEJS__"
 WorkingDirectory=__INSTALL_DIR__/src/
-ExecStart=__YNH_NPM__ start
+ExecStart=__NODEJS_DIR__/npm start
 StandardOutput=append:/var/log/__APP__/__APP__.log
 StandardError=inherit
 
