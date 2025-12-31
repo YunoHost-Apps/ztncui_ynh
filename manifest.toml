@@ -66,8 +66,5 @@ ram.runtime = "100M"
     [resources.ports]
     main.default = 8095
 
-    [resources.apt]
-    packages = "gcc, g++, node-gyp"
-
     [resources.nodejs]
     version = "16"
