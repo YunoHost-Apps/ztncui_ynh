@@ -66,5 +66,8 @@ ram.runtime = "100M"
     [resources.ports]
     main.default = 8095
 
+    [resources.apt]
+    packages = "make, build-essential"
+
     [resources.nodejs]
     version = "16"
