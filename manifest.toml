@@ -17,11 +17,14 @@ website = "https://key-networks.com/ztncui/"
 code = "https://github.com/key-networks/ztncui"
 
 [integration]
-yunohost = ">=11.2"
+yunohost = ">=12.1.38"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
+
 ldap = false
 sso = false
+
 disk = "200M"
 ram.build = "350M"
 ram.runtime = "100M"
@@ -64,4 +67,7 @@ ram.runtime = "100M"
     main.default = 8095
 
     [resources.apt]
-    packages = "gcc, g++, node-gyp"
+    packages = "make, build-essential"
+
+    [resources.nodejs]
+    version = "16"
